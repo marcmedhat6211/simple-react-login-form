@@ -27,7 +27,7 @@ function App() {
    *   1) the first one is a function where you specify the action you want to do
    *   2) the second one is an array of dependencies, which tells WHEN you want that function to tun
    * IMPORTANT TO NOTE:
-   *   the function runs AFTER every component REEVALUATION, then it checks, if the dependencies changed, then it will run the function, otherwise, nothing happens
+   *   the function runs AFTER every component EEVALUATION, then it checks, if the dependencies changed, then it will run the function, otherwise, nothing happens
    *   the function below will run only once because the dependencies hasn't change from the first time it ran
    */
   useEffect(() => {

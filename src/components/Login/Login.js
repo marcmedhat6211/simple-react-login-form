@@ -17,10 +17,36 @@ const Login = (props) => {
    *  now what we're doing is that we call the function setFormIsValid() ONLY when the dependencies (enteredEmail or enteredPassword) changes
    *  so that's handling another side effect
    */
+
+  /**
+   * Now we have a problem here
+   *  if this function sends an HTTP Request on every keystroke, now that's a problem and a lot of traffic on the network
+   *  The solution is to use a CLEANUP FUNCTION
+   *    the cleanup function is a return statement from the effect function
+   *    the cleanup function is a function that runs before the effect function runs, BUT NOT the fisrt time
+   */
+  // useEffect(() => {
+  //   setFormIsValid(
+  //     enteredEmail.includes("@") && enteredPassword.trim().length > 6
+  //   );
+  // }, [enteredEmail, enteredPassword]);
+
+  /**
+   * What we did here is that we've set a timer and then we're clearing that timer on every keystroke
+   * so that this function only runs once when the user is done writing
+   */
   useEffect(() => {
-    setFormIsValid(
-      enteredEmail.includes("@") && enteredPassword.trim().length > 6
-    );
+    const identifier = setTimeout(() => {
+      console.log("checking for validity");
+      setFormIsValid(
+        enteredEmail.includes("@") && enteredPassword.trim().length > 6
+      );
+    }, 500);
+
+    return () => {
+      console.log("CLEANUP METHOD");
+      clearTimeout(identifier);
+    };
   }, [enteredEmail, enteredPassword]);
 
   const emailChangeHandler = (event) => {
