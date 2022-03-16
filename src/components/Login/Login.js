@@ -77,6 +77,11 @@ const Login = (props) => {
   //   );
   // }, [enteredEmail, enteredPassword]);
 
+  // here we are using object destructuring to extract the isValid values from the emailState and the passwordState
+  // and the emailIsValid and passwordIsValid are just ALIASES when you use that syntax
+  const { isValid: emailIsValid } = emailState;
+  const { isValid: passwordIsValid } = passwordState;
+
   /**
    * What we did here is that we've set a timer and then we're clearing that timer on every keystroke
    * so that this function only runs once when the user is done writing
@@ -84,16 +89,14 @@ const Login = (props) => {
   useEffect(() => {
     const identifier = setTimeout(() => {
       // console.log("checking for validity");
-      setFormIsValid(
-        emailState.isValid && passwordState.value.trim().length > 6
-      );
+      setFormIsValid(emailIsValid && passwordIsValid);
     }, 500);
 
     return () => {
       // console.log("CLEANUP METHOD");
       clearTimeout(identifier);
     };
-  }, [emailState, passwordState]);
+  }, [emailIsValid, passwordIsValid]);
 
   const emailChangeHandler = (event) => {
     // setEnteredEmail(event.target.value);
