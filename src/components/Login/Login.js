@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useReducer } from "react";
+import React, { useState, useEffect, useReducer, useContext } from "react";
 
 import Card from "../UI/Card/Card";
 import classes from "./Login.module.css";
 import Button from "../UI/Button/Button";
+import AuthContext from "../../store/auth-context";
 
 /**
  * useReducer hook:
@@ -56,6 +57,8 @@ const Login = (props) => {
     value: "",
     isValid: null,
   });
+
+  const authCtx = useContext(AuthContext);
 
   /**
    * Here we used effect because it is a side effect to use the code twice in 2 places
@@ -128,7 +131,7 @@ const Login = (props) => {
 
   const submitHandler = (event) => {
     event.preventDefault();
-    props.onLogin(emailState.value, passwordState.value);
+    authCtx.onLogin(emailState.value, passwordState.value);
   };
 
   return (

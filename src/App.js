@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext } from "react";
 
 import Login from "./components/Login/Login";
 import Home from "./components/Home/Home";
@@ -11,7 +11,7 @@ import AuthContext from "./store/auth-context";
  */
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   /**
    * this approach will cause an infinite loop, why ?
@@ -31,24 +31,24 @@ function App() {
    *   the function runs AFTER every component EEVALUATION, then it checks, if the dependencies changed, then it will run the function, otherwise, nothing happens
    *   the function below will run only once because the dependencies hasn't change from the first time it ran
    */
-  useEffect(() => {
-    const storedUserLoggedInInformation = localStorage.getItem("isLoggedIn");
-    if (storedUserLoggedInInformation === "1") {
-      setIsLoggedIn(true);
-    }
-  }, []);
+  // useEffect(() => { // commented because used in auth context
+  //   const storedUserLoggedInInformation = localStorage.getItem("isLoggedIn");
+  //   if (storedUserLoggedInInformation === "1") {
+  //     setIsLoggedIn(true);
+  //   }
+  // }, []);
 
-  const loginHandler = (email, password) => {
-    // We should of course check email and password
-    // But it's just a dummy/ demo anyways
-    localStorage.setItem("isLoggedIn", "1");
-    setIsLoggedIn(true);
-  };
+  // const loginHandler = (email, password) => {
+  //   // We should of course check email and password
+  //   // But it's just a dummy/ demo anyways
+  //   localStorage.setItem("isLoggedIn", "1");
+  //   setIsLoggedIn(true);
+  // };
 
-  const logoutHandler = () => {
-    localStorage.removeItem("isLoggedIn");
-    setIsLoggedIn(false);
-  };
+  // const logoutHandler = () => {
+  //   localStorage.removeItem("isLoggedIn");
+  //   setIsLoggedIn(false);
+  // };
 
   /**
    * AuthContext.Provider is a component we can use is pur jsx code, and it's how you provide, or wrap your component where you want to use that context
@@ -57,21 +57,21 @@ function App() {
    * you can also pass functions to the context so you can use these functions anywhere in your child components
    *    like here for example the onLogout prop which points at the logoutHandler method
    */
+
+  /**
+   * we now don't need the props on the main header anymore because we're using context
+   * <MainHeader isAuthenticated={isLoggedIn} onLogout={logoutHandler} />
+   */
+
+  const ctx = useContext(AuthContext);
   return (
-    <AuthContext.Provider
-      value={{
-        isLoggedIn: isLoggedIn,
-        onLogout: logoutHandler,
-      }}
-    >
-      {/* we now don't need the props on the main header anymore because we're using context */}
-      {/* <MainHeader isAuthenticated={isLoggedIn} onLogout={logoutHandler} /> */}
+    <React.Fragment>
       <MainHeader />
       <main>
-        {!isLoggedIn && <Login onLogin={loginHandler} />}
-        {isLoggedIn && <Home onLogout={logoutHandler} />}
+        {!ctx.isLoggedIn && <Login />}
+        {ctx.isLoggedIn && <Home />}
       </main>
-    </AuthContext.Provider>
+    </React.Fragment>
   );
 }
 
