@@ -50,9 +50,23 @@ function App() {
     setIsLoggedIn(false);
   };
 
+  /**
+   * AuthContext.Provider is a component we can use is pur jsx code, and it's how you provide, or wrap your component where you want to use that context
+   * you have to specify the value prop on the provider component, it's the default value
+   * now any child component of the App component will have access to that context
+   * you can also pass functions to the context so you can use these functions anywhere in your child components
+   *    like here for example the onLogout prop which points at the logoutHandler method
+   */
   return (
-    <AuthContext.Provider>
-      <MainHeader isAuthenticated={isLoggedIn} onLogout={logoutHandler} />
+    <AuthContext.Provider
+      value={{
+        isLoggedIn: isLoggedIn,
+        onLogout: logoutHandler,
+      }}
+    >
+      {/* we now don't need the props on the main header anymore because we're using context */}
+      {/* <MainHeader isAuthenticated={isLoggedIn} onLogout={logoutHandler} /> */}
+      <MainHeader />
       <main>
         {!isLoggedIn && <Login onLogin={loginHandler} />}
         {isLoggedIn && <Home onLogout={logoutHandler} />}
